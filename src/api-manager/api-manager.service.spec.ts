@@ -12,7 +12,7 @@ describe('ApiManagerService', () => {
     service = module.get<ApiManagerService>(ApiManagerService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('when asking for meets by manager id, return error if id is not uuid', () => {
+    expect(service.findMeetsByManager('xxx')).toThrow();
   });
 });
