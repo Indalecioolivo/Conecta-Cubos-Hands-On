@@ -8,18 +8,37 @@ import { CreateMeetService } from './services/create-meet.service';
 import { MailService } from 'src/providers/mailer.service';
 import { DeleteMeetService } from './services/delete-meet.service';
 import { StorageService } from 'src/providers/storage.service';
+import { CreateManagersService } from './services/create-managers.service';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
-  controllers: [ApiAdminController],
-  providers: [
-    PrismaService,
-    MailService,
-    CreateManagerService,
-    ActivateManagerService,
-    DeactivateManagerService,
-    CreateMeetService,
-    DeleteMeetService,
-    StorageService,
-  ],
+    controllers: [ApiAdminController],
+    providers: [
+        PrismaService,
+        MailService,
+        CreateManagerService,
+        CreateManagersService,
+        ActivateManagerService,
+        DeactivateManagerService,
+        CreateMeetService,
+        DeleteMeetService,
+        StorageService,
+    ],
+    imports: [
+        MailerModule.forRoot({
+            transport: {
+                host: process.env.MAILER_HOST,
+                secure: false,
+                port: Number(process.env.MAILER_PORT),
+                auth: {
+                    user: process.env.MAILER_USER,
+                    pass: process.env.MAILER_PASS,
+                },
+            },
+            defaults: {
+                from: process.env.MAILER_FROM,
+            },
+        }),
+    ],
 })
 export class ApiAdminModule {}
