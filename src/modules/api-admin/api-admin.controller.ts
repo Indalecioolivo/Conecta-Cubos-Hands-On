@@ -24,6 +24,7 @@ import { CreateMeetService } from './services/create-meet.service';
 import { DeleteMeetService } from './services/delete-meet.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateManagersService } from './services/create-managers.service';
+import { DeleteManagerService } from './services/delete-manager.service';
 
 @UseGuards(RolesGuard)
 @Controller('api-admin')
@@ -35,6 +36,7 @@ export class ApiAdminController {
         private readonly createMeetService: CreateMeetService,
         private readonly deleteMeetService: DeleteMeetService,
         private readonly createListOfManagersService: CreateManagersService,
+        private readonly deleteManagerService: DeleteManagerService,
     ) {}
 
     @Roles(['admin'])
@@ -82,5 +84,11 @@ export class ApiAdminController {
     @Delete('meet/:id/delete')
     remove(@Param() param: MeetIdParamDto) {
         return this.deleteMeetService.execute(param.id);
+    }
+
+    @Roles(['admin'])
+    @Delete('manager/:id/delete')
+    removeManager(@Param() param: ManagerIdParamDto) {
+        return this.deleteManagerService.execute(param.id);
     }
 }

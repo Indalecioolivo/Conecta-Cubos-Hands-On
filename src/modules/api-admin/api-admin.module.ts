@@ -10,6 +10,7 @@ import { DeleteMeetService } from './services/delete-meet.service';
 import { StorageService } from 'src/providers/storage.service';
 import { CreateManagersService } from './services/create-managers.service';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { DeleteManagerService } from './services/delete-manager.service';
 
 @Module({
     controllers: [ApiAdminController],
@@ -23,6 +24,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
         CreateMeetService,
         DeleteMeetService,
         StorageService,
+        DeleteManagerService,
     ],
     imports: [
         MailerModule.forRoot({
