@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/mapped-types';
 import { IsUUID, IsNotEmpty, IsEmail } from 'class-validator';
 
 export class ManagerDto {
@@ -32,3 +33,5 @@ export class ManagerTokenAuthorizationDto implements Partial<ManagerDto> {
     @IsNotEmpty()
     token: string;
 }
+
+export class UpdateManagerDTO extends PartialType(CreateManagerDto) {}

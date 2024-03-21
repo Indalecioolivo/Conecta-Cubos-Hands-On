@@ -8,6 +8,7 @@ import {
     Req,
     UseInterceptors,
     UploadedFile,
+    Put,
 } from '@nestjs/common';
 import { CreateManagerService } from './services/create-manager.service';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -15,6 +16,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import {
     CreateManagerDto,
     ManagerIdParamDto,
+    UpdateManagerDTO,
 } from '../api-manager/dto/manager.dto';
 import { Request } from 'express';
 import { DeactivateManagerService } from './services/deactivate-manager.service';
@@ -25,6 +27,7 @@ import { DeleteMeetService } from './services/delete-meet.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateManagersService } from './services/create-managers.service';
 import { DeleteManagerService } from './services/delete-manager.service';
+import { UpdateManagerService } from './services/update-manager.service';
 
 @UseGuards(RolesGuard)
 @Controller('api-admin')
@@ -37,6 +40,7 @@ export class ApiAdminController {
         private readonly deleteMeetService: DeleteMeetService,
         private readonly createListOfManagersService: CreateManagersService,
         private readonly deleteManagerService: DeleteManagerService,
+        private readonly updateManagerService: UpdateManagerService,
     ) {}
 
     @Roles(['admin'])
@@ -90,5 +94,16 @@ export class ApiAdminController {
     @Delete('manager/:id/delete')
     removeManager(@Param() param: ManagerIdParamDto) {
         return this.deleteManagerService.execute(param.id);
+    }
+
+    @Roles(['admini'])
+    @Put('manager/:id/update')
+    updateManager(
+        @Param() param: ManagerIdParamDto,
+        @Body() updateManager: UpdateManagerDTO,
+    ) {
+        return this.updateManagerService.execute(param.id, {
+            ...updateManager,
+        });
     }
 }
