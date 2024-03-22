@@ -96,7 +96,7 @@ export class ApiAdminController {
         return this.deleteManagerService.execute(param.id);
     }
 
-    @Roles(['admini'])
+    @Roles(['admin'])
     @Put('manager/:id/update')
     updateManager(
         @Param() param: ManagerIdParamDto,

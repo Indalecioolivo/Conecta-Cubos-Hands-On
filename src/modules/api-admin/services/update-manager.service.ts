@@ -26,6 +26,19 @@ export class UpdateManagerService {
                 );
             }
 
+            if (email && email !== manager.email) {
+                const emailExist = await this.prismaService.manager.findFirst({
+                    where: { email },
+                });
+
+                if (emailExist) {
+                    throw new HttpException(
+                        'Email already used.',
+                        HttpStatus.BAD_REQUEST,
+                    );
+                }
+            }
+
             return this.prismaService.manager.update({
                 data: {
                     name,
