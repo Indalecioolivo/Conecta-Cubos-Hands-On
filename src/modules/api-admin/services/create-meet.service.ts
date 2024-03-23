@@ -41,10 +41,13 @@ export class CreateMeetService {
                     HttpStatus.BAD_REQUEST,
                 );
             }
-
+            console.log({ ...data });
+            console.log('------------------------------');
             const createdMeet = await this.prismaService.meet.create({
                 data: {
                     ...data,
+                    start_time: new Date(data.start_time),
+                    end_time: new Date(data.end_time),
                     manager_id,
                     admin_id: manager.admin_id,
                     datetime: new Date(data.datetime),

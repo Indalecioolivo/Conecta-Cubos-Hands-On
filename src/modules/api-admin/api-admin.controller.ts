@@ -9,6 +9,7 @@ import {
     UseInterceptors,
     UploadedFile,
     Put,
+    Get,
 } from '@nestjs/common';
 import { CreateManagerService } from './services/create-manager.service';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -28,6 +29,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateManagersService } from './services/create-managers.service';
 import { DeleteManagerService } from './services/delete-manager.service';
 import { UpdateManagerService } from './services/update-manager.service';
+import { FindMeetsService } from './services/findMeets.service';
 
 @UseGuards(RolesGuard)
 @Controller('api-admin')
@@ -41,6 +43,7 @@ export class ApiAdminController {
         private readonly createListOfManagersService: CreateManagersService,
         private readonly deleteManagerService: DeleteManagerService,
         private readonly updateManagerService: UpdateManagerService,
+        private readonly findMeetsService: FindMeetsService,
     ) {}
 
     @Roles(['admin'])
@@ -105,5 +108,10 @@ export class ApiAdminController {
         return this.updateManagerService.execute(param.id, {
             ...updateManager,
         });
+    }
+
+    @Get('meet/')
+    findMeets() {
+        return this.findMeetsService.execute();
     }
 }
