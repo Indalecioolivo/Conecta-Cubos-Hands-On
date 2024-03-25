@@ -16,13 +16,7 @@ export class CreateManagersService {
 
     async execute({ managers }: CreateListManagers, adminId: string) {
         try {
-            // const { user: admin } = req.user;
-            // const managers: CreateManagerDto[] = req.body.managers;
-
             const createdManagers = [];
-            console.log(managers);
-            console.log('--------------------');
-            console.log(adminId);
 
             for (let i = 0; i < managers.length; i++) {
                 const managerExists =
@@ -43,8 +37,6 @@ export class CreateManagersService {
                         admin_id: adminId,
                     },
                 });
-
-                console.log(manager);
 
                 const token = sign(
                     { manager_id: manager.id },

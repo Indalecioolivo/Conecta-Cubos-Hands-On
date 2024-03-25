@@ -44,6 +44,7 @@ export class UpdateImageService {
                 where: { id: meetId },
                 data: {
                     image_link: `${savedImage.Location}`,
+                    updated_at: new Date(),
                 },
             });
 

@@ -11,6 +11,7 @@ import {
     Put,
     Get,
     Request,
+    Query,
 } from '@nestjs/common';
 import { CreateManagerService } from './services/create-manager.service';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -33,6 +34,7 @@ import { DeleteManagerService } from './services/delete-manager.service';
 import { UpdateManagerService } from './services/update-manager.service';
 import { FindMeetsService } from './services/findMeets.service';
 import { UpdateImageService } from './services/update-image.service';
+import { IQueryParams } from './dto/query-param-meet.dto';
 
 @UseGuards(RolesGuard)
 @Controller('api-admin')
@@ -116,8 +118,8 @@ export class ApiAdminController {
     }
 
     @Get('meet/')
-    findMeets() {
-        return this.findMeetsService.execute();
+    findMeets(@Query() query: IQueryParams) {
+        return this.findMeetsService.execute({ ...query });
     }
 
     @Roles(['admin'])

@@ -1,23 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/providers/prisma.service';
+import { IQueryParams } from '../dto/query-param-meet.dto';
 
 @Injectable()
 export class FindMeetsService {
     constructor(private prismaService: PrismaService) {}
 
-    async execute() {
+    async execute({ dateStart, dateEnd, count, offSet }: IQueryParams) {
         try {
-            const meets = await this.prismaService.meet.findMany({
+            let meets = await this.prismaService.meet.findMany({
                 where: {
-                    created_at: {
-                        gte: new Date().toISOString(),
+                    start_time: {
+                        gte: new Date(),
                     },
                 },
+                take: Number(count),
+                skip: Number(offSet),
             });
 
-            console.log(meets);
+            if (dateStart && dateEnd) {
+                meets = await this.prismaService.meet.findMany({
+                    where: {
+                        manager: { isactive: true },
+                        start_time: {
+                            gte: new Date(dateStart),
+                            lte: new Date(dateEnd),
+                        },
+                    },
+                    take: Number(count),
+                    skip: Number(offSet),
+                });
+            }
+
+            return meets;
         } catch (error) {
-            console.log(error);
+            return new HttpException(error.message, error.status);
         }
     }
 }
