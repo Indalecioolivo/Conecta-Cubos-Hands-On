@@ -13,6 +13,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { DeleteManagerService } from './services/delete-manager.service';
 import { UpdateManagerService } from './services/update-manager.service';
 import { FindMeetsService } from './services/findMeets.service';
+import { UpdateImageService } from './services/update-image.service';
 
 @Module({
     controllers: [ApiAdminController],
@@ -29,6 +30,7 @@ import { FindMeetsService } from './services/findMeets.service';
         DeleteManagerService,
         UpdateManagerService,
         FindMeetsService,
+        UpdateImageService,
     ],
     imports: [
         MailerModule.forRoot({

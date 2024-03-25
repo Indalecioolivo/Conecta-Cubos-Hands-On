@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request } from 'express';
+// import { Request } from 'express';
 import { readFile } from 'node:fs/promises';
 import { sign, verify } from 'jsonwebtoken';
-import { CreateManagerDto } from 'src/modules/api-manager/dto/manager.dto';
+import { CreateListManagers } from 'src/modules/api-manager/dto/manager.dto';
 import { PrismaService } from 'src/providers/prisma.service';
 import { compile } from 'handlebars';
 import { MailService } from 'src/providers/mailer.service';
@@ -14,12 +14,15 @@ export class CreateManagersService {
         private readonly mailerService: MailService,
     ) {}
 
-    async execute(createManagerDto: CreateManagerDto[], req: Request) {
+    async execute({ managers }: CreateListManagers, adminId: string) {
         try {
-            const { user: admin } = req.body;
-            const managers: CreateManagerDto[] = req.body.managers;
+            // const { user: admin } = req.user;
+            // const managers: CreateManagerDto[] = req.body.managers;
 
             const createdManagers = [];
+            console.log(managers);
+            console.log('--------------------');
+            console.log(adminId);
 
             for (let i = 0; i < managers.length; i++) {
                 const managerExists =
@@ -28,7 +31,7 @@ export class CreateManagersService {
                     });
 
                 if (managerExists) {
-                    return new HttpException(
+                    throw new HttpException(
                         'Manager already exists',
                         HttpStatus.BAD_REQUEST,
                     );
@@ -37,9 +40,11 @@ export class CreateManagersService {
                 const manager = await this.prismaService.manager.create({
                     data: {
                         ...managers[i],
-                        admin_id: admin.id,
+                        admin_id: adminId,
                     },
                 });
+
+                console.log(manager);
 
                 const token = sign(
                     { manager_id: manager.id },
@@ -92,8 +97,8 @@ export class CreateManagersService {
         } catch (error) {
             console.log(error);
             throw new HttpException(
-                'Unexpected server error',
-                HttpStatus.INTERNAL_SERVER_ERROR,
+                error.message,
+                error.status ?? HttpStatus.INTERNAL_SERVER_ERROR,
             );
         }
     }

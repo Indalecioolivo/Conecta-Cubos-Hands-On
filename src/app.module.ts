@@ -11,19 +11,19 @@ import { ApiManagerController } from './modules/api-manager/api-manager.controll
 import { ApiAdminController } from './modules/api-admin/api-admin.controller';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    JwtModule.register({ secret: process.env.JWT_SECRET }),
-    ApiManagerModule,
-    ApiAdminModule,
-  ],
-  controllers: [AppController],
-  providers: [PrismaService, AppService],
+    imports: [
+        ConfigModule.forRoot(),
+        JwtModule.register({ secret: process.env.JWT_SECRET }),
+        ApiManagerModule,
+        ApiAdminModule,
+    ],
+    controllers: [AppController],
+    providers: [PrismaService, AppService],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes(ApiManagerController, ApiAdminController);
-  }
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(AuthMiddleware)
+            .forRoutes(ApiManagerController, ApiAdminController);
+    }
 }

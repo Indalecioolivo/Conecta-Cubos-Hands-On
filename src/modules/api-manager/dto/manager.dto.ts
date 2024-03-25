@@ -23,6 +23,11 @@ export class CreateManagerDto implements Partial<ManagerDto> {
     email: string;
 }
 
+export class CreateListManagers {
+    @IsNotEmpty()
+    managers: CreateManagerDto[];
+}
+
 export class ManagerIdParamDto implements Partial<ManagerDto> {
     @IsUUID()
     @IsNotEmpty()

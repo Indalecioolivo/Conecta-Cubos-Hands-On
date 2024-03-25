@@ -5,21 +5,23 @@ import {
     Param,
     Delete,
     UseGuards,
-    Req,
+    // Req,
     UseInterceptors,
     UploadedFile,
     Put,
     Get,
+    Request,
 } from '@nestjs/common';
 import { CreateManagerService } from './services/create-manager.service';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import {
-    CreateManagerDto,
+    CreateListManagers,
+    // CreateManagerDto,
     ManagerIdParamDto,
     UpdateManagerDTO,
 } from '../api-manager/dto/manager.dto';
-import { Request } from 'express';
+// import { Request } from 'express';
 import { DeactivateManagerService } from './services/deactivate-manager.service';
 import { ActivateManagerService } from './services/activate-manager.service';
 import { CreateMeetDto, MeetIdParamDto } from '../api-manager/dto/meet.dto';
@@ -30,6 +32,7 @@ import { CreateManagersService } from './services/create-managers.service';
 import { DeleteManagerService } from './services/delete-manager.service';
 import { UpdateManagerService } from './services/update-manager.service';
 import { FindMeetsService } from './services/findMeets.service';
+import { UpdateImageService } from './services/update-image.service';
 
 @UseGuards(RolesGuard)
 @Controller('api-admin')
@@ -44,24 +47,28 @@ export class ApiAdminController {
         private readonly deleteManagerService: DeleteManagerService,
         private readonly updateManagerService: UpdateManagerService,
         private readonly findMeetsService: FindMeetsService,
+        private readonly updateImageService: UpdateImageService,
     ) {}
 
-    @Roles(['admin'])
-    @Post('manager/create')
-    createManager(
-        @Body() createManagerDto: CreateManagerDto,
-        @Req() req: Request,
-    ) {
-        return this.createManagerService.execute(createManagerDto, req);
-    }
+    // @Roles(['admin'])
+    // @Post('manager/create')
+    // createManager(
+    //     @Body() createManagerDto: CreateManagerDto,
+    //     @Req() req: Request,
+    // ) {
+    //     return this.createManagerService.execute(createManagerDto, req);
+    // }
 
     @Roles(['admin'])
     @Post('manager/create-many')
     createListOfManagers(
-        @Body() createManagerDto: CreateManagerDto[],
-        @Req() req: Request,
+        @Body() createManagerDto: CreateListManagers,
+        @Request() req,
     ) {
-        return this.createListOfManagersService.execute(createManagerDto, req);
+        return this.createListOfManagersService.execute(
+            createManagerDto,
+            req.user.id,
+        );
     }
 
     @Roles(['admin'])
@@ -78,13 +85,11 @@ export class ApiAdminController {
 
     @Roles(['admin'])
     @Post('meet/create/:id')
-    @UseInterceptors(FileInterceptor('file'))
     createMeet(
         @Param() param: ManagerIdParamDto,
         @Body() createMeetDto: CreateMeetDto,
-        @UploadedFile() file: Express.Multer.File,
     ) {
-        return this.createMeetService.execute(param.id, createMeetDto, file);
+        return this.createMeetService.execute(param.id, createMeetDto);
     }
 
     @Roles(['admin'])
@@ -113,5 +118,15 @@ export class ApiAdminController {
     @Get('meet/')
     findMeets() {
         return this.findMeetsService.execute();
+    }
+
+    @Roles(['admin'])
+    @Put('meet/:id/image')
+    @UseInterceptors(FileInterceptor('image'))
+    updateImageMeet(
+        @Param() param: MeetIdParamDto,
+        @UploadedFile() file: Express.Multer.File,
+    ) {
+        return this.updateImageService.execute(file, param.id);
     }
 }
