@@ -18,7 +18,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import {
     CreateListManagers,
-    // CreateManagerDto,
+    CreateManagerDto,
     ManagerIdParamDto,
     UpdateManagerDTO,
 } from '../api-manager/dto/manager.dto';
@@ -52,14 +52,11 @@ export class ApiAdminController {
         private readonly updateImageService: UpdateImageService,
     ) {}
 
-    // @Roles(['admin'])
-    // @Post('manager/create')
-    // createManager(
-    //     @Body() createManagerDto: CreateManagerDto,
-    //     @Req() req: Request,
-    // ) {
-    //     return this.createManagerService.execute(createManagerDto, req);
-    // }
+    @Roles(['admin'])
+    @Post('manager/create')
+    createManager(@Body() createManagerDto: CreateManagerDto, @Request() req) {
+        return this.createManagerService.execute(createManagerDto, req);
+    }
 
     @Roles(['admin'])
     @Post('manager/create-many')
@@ -96,7 +93,7 @@ export class ApiAdminController {
 
     @Roles(['admin'])
     @Delete('meet/:id/delete')
-    remove(@Param() param: MeetIdParamDto) {
+    removeMeet(@Param() param: MeetIdParamDto) {
         return this.deleteMeetService.execute(param.id);
     }
 
@@ -117,7 +114,7 @@ export class ApiAdminController {
         });
     }
 
-    @Get('meet/')
+    @Get('meet')
     findMeets(@Query() query: IQueryParams) {
         return this.findMeetsService.execute({ ...query });
     }

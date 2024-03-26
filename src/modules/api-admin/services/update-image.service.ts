@@ -30,12 +30,15 @@ export class UpdateImageService {
             }
 
             if (meetExist.image_link) {
-                await this.storageService.deleteImage(meetExist.image_link);
+                const path = meetExist.image_link
+                    .replace(`${process.env.S3_LINK}/`, '')
+                    .trim();
+
+                await this.storageService.deleteImage(path);
             }
 
             const savedImage = await this.storageService.storageImage(
                 meetId,
-                file.originalname,
                 file.buffer,
                 file.mimetype,
             );

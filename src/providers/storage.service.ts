@@ -20,14 +20,13 @@ export class StorageService {
 
     storageImage = async (
         meet_id: string,
-        path: string,
         buffer: Buffer,
         mimetype: string,
     ) => {
         const file = await this.s3
             .upload({
                 Bucket: process.env.S3_BUCKET,
-                Key: `meets/${meet_id}/${path}`,
+                Key: `meets/${meet_id}/image`,
                 Body: buffer,
                 ContentType: mimetype,
             })
