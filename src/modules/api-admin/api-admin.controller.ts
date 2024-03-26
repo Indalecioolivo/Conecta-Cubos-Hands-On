@@ -5,7 +5,6 @@ import {
     Param,
     Delete,
     UseGuards,
-    // Req,
     UseInterceptors,
     UploadedFile,
     Put,
@@ -22,7 +21,6 @@ import {
     ManagerIdParamDto,
     UpdateManagerDTO,
 } from '../api-manager/dto/manager.dto';
-// import { Request } from 'express';
 import { DeactivateManagerService } from './services/deactivate-manager.service';
 import { ActivateManagerService } from './services/activate-manager.service';
 import { CreateMeetDto, MeetIdParamDto } from '../api-manager/dto/meet.dto';
@@ -55,7 +53,7 @@ export class ApiAdminController {
     @Roles(['admin'])
     @Post('manager/create')
     createManager(@Body() createManagerDto: CreateManagerDto, @Request() req) {
-        return this.createManagerService.execute(createManagerDto, req);
+        return this.createManagerService.execute(createManagerDto, req.user.id);
     }
 
     @Roles(['admin'])

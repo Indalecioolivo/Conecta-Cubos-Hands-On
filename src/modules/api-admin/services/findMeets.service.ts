@@ -10,12 +10,13 @@ export class FindMeetsService {
         try {
             let meets = await this.prismaService.meet.findMany({
                 where: {
+                    manager: { isactive: true },
                     start_time: {
                         gte: new Date(),
                     },
                 },
-                take: Number(count),
-                skip: Number(offSet),
+                take: Number(count) || 5,
+                skip: Number(offSet) || 0,
             });
 
             if (dateStart && dateEnd) {
