@@ -14,6 +14,7 @@ import { DeleteManagerService } from './services/delete-manager.service';
 import { UpdateManagerService } from './services/update-manager.service';
 import { FindMeetsService } from './services/findMeets.service';
 import { UpdateImageService } from './services/update-image.service';
+import { UpdateMeetService } from './services/update-meet.service';
 
 @Module({
     controllers: [ApiAdminController],
@@ -31,6 +32,7 @@ import { UpdateImageService } from './services/update-image.service';
         UpdateManagerService,
         FindMeetsService,
         UpdateImageService,
+        UpdateMeetService,
     ],
     imports: [
         MailerModule.forRoot({
